@@ -274,7 +274,7 @@ defmodule Contex.Plot do
     {result, _top} =
       Enum.reduce(scales, {[], legend_top}, fn scale, {acc, top} ->
         legend = [
-          ~s|<g transform="translate(#{legend_left}, #{top})">|,
+          ~s|<g transform="translate(#{legend_left}, #{top + @y_axis_margin})">|,
           Contex.Legend.to_svg(scale),
           "</g>"
         ]
