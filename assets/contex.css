@@ -1,7 +1,6 @@
 /* Styling for tick line */
 .exc-tick line {
   stroke: rgb(207, 207, 207);
-  ;
 }
 
 /* Styling for tick text */
@@ -29,7 +28,7 @@
 
 /* Styling for text of colours in legend */
 .exc-legend text {
-  fill: grey;
+  fill: white;
   font-size: 0.8rem;
   stroke: none;
   font-family: Helvetica, Arial, sans-serif;
@@ -37,14 +36,14 @@
 
 /* Styling for title & subtitle of any plot */
 .exc-title {
-  fill: darkslategray;
+  fill: white;
   font-size: 1.3rem;
   stroke: none;
   font-family: Helvetica, Arial, sans-serif;
 }
 
 .exc-subtitle {
-  fill: darkgrey;
+  fill: white;
   font-size: 0.7rem;
   stroke: none;
   font-family: Helvetica, Arial, sans-serif;

@@ -180,7 +180,8 @@ defmodule Contex.PieChart do
             <text x="#{negate_if_flipped(r, text_rotation)}"
                   y="#{negate_if_flipped(r, text_rotation)}"
               text-anchor="middle"
-              fill="white"
+              fill="transparent"
+              color="white"
               stroke-width="1"
               transform="rotate(#{text_rotation},#{r},#{r})
                          translate(#{r / 2}, #{negate_if_flipped(5, text_rotation)})

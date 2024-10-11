@@ -62,7 +62,7 @@ defmodule Contex.Plot do
   @x_axis_tick_labels 70
   @default_style """
   <style type="text/css"><![CDATA[
-    text {fill: black}
+    text {fill: white}
     line {stroke: black}
   ]]></style>
   """
