@@ -53,7 +53,7 @@ defmodule Contex.Plot do
   ]
 
   @default_padding 10
-  @top_title_margin 20
+  @top_title_margin 40
   @top_subtitle_margin 15
   @y_axis_margin 20
   @y_axis_tick_labels 70
