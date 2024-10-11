@@ -233,6 +233,12 @@ defmodule Contex.Plot do
 
     plot_content = PlotContent.set_size(plot_content, content_width, content_height)
 
+    horizontal_offset =
+      case legend_setting do
+        setting when setting in [:legend_left, :legend_right] -> left
+        _ -> width * 0.3
+      end
+
     output = [
       ~s|<svg version="1.1" xmlns="http://www.w3.org/2000/svg\" |,
       ~s|xmlns:xlink="http://www.w3.org/1999/xlink" class="chart" |,
@@ -240,7 +246,7 @@ defmodule Contex.Plot do
       get_default_style(plot),
       get_titles_svg(plot, content_width, legend_setting),
       get_axis_labels_svg(plot, content_width, content_height),
-      ~s|<g transform="translate(#{left},#{top})">|,
+      ~s|<g transform="translate(#{horizontal_offset},#{top})">|,
       PlotContent.to_svg(plot_content, plot.plot_options),
       "</g>",
       get_svg_legends(legend_scales, legend_left, legend_top, plot.plot_options),
