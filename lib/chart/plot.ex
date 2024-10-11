@@ -202,13 +202,21 @@ defmodule Contex.Plot do
   """
   def to_svg(%Plot{width: width, height: height, plot_content: plot_content} = plot) do
     %{left: left, right: right, top: top, bottom: bottom} = plot.margins
+    legend_setting = plot.plot_options[:legend_setting]
     content_height = height - (top + bottom)
-    content_width = width - (left + right)
+
+    content_width =
+      case legend_setting do
+        setting when setting in [:legend_left, :legend_right] ->
+          width - (left + right)
+
+        _ ->
+          width
+      end
 
     x_tick_label_space = if plot.plot_options.show_x_axis, do: @x_axis_tick_labels, else: 0
 
     legend_scales = PlotContent.get_legend_scales(plot_content)
-    legend_setting = plot.plot_options[:legend_setting]
 
     legend_left =
       case legend_setting do
@@ -230,7 +238,7 @@ defmodule Contex.Plot do
       ~s|xmlns:xlink="http://www.w3.org/1999/xlink" class="chart" |,
       ~s|viewBox="0 0 #{width} #{height}" role="img">|,
       get_default_style(plot),
-      get_titles_svg(plot, content_width),
+      get_titles_svg(plot, content_width, legend_setting),
       get_axis_labels_svg(plot, content_width, content_height),
       ~s|<g transform="translate(#{left},#{top})">|,
       PlotContent.to_svg(plot_content, plot.plot_options),
@@ -274,7 +282,7 @@ defmodule Contex.Plot do
     {result, _top} =
       Enum.reduce(scales, {[], legend_top}, fn scale, {acc, top} ->
         legend = [
-          ~s|<g transform="translate(#{legend_left}, #{top + @y_axis_margin})">|,
+          ~s|<g transform="translate(#{legend_left}, #{top})">|,
           Contex.Legend.to_svg(scale),
           "</g>"
         ]
@@ -287,10 +295,17 @@ defmodule Contex.Plot do
 
   defp get_titles_svg(
          %Plot{title: title, subtitle: subtitle, margins: margins} = _plot,
-         content_width
+         content_width,
+         legend_setting
        )
        when is_binary(title) or is_binary(subtitle) do
-    centre = margins.left + content_width / 2.0
+    centre =
+      if legend_setting == :legend_bottom do
+        content_width / 2.0
+      else
+        margins.left + content_width / 2.0
+      end
+
     title_y = @top_title_margin
 
     title_svg =
@@ -320,7 +335,7 @@ defmodule Contex.Plot do
     [title_svg, subtitle_svg]
   end
 
-  defp get_titles_svg(_, _), do: ""
+  defp get_titles_svg(_, _, _), do: ""
 
   defp get_axis_labels_svg(
          %Plot{x_label: x_label, y_label: y_label, margins: margins} = _plot,
