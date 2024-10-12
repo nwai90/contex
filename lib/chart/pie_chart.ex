@@ -173,6 +173,7 @@ defmodule Contex.PieChart do
     scale_values(chart)
     |> Enum.map_reduce({0, 0}, fn {value, category}, {idx, offset} ->
       text_rotation = rotate_for(value, offset)
+      displayed_percentage_value = Float.round(value, 2)
 
       label =
         if with_labels? do
@@ -182,12 +183,13 @@ defmodule Contex.PieChart do
               text-anchor="middle"
               fill="transparent"
               color="white"
+              class="#{if displayed_percentage_value <= 5.0, do: "contex-label-small", else: ""}"
               stroke-width="1"
               transform="rotate(#{text_rotation},#{r},#{r})
                          translate(#{r / 2}, #{negate_if_flipped(5, text_rotation)})
                          #{if need_flip?(text_rotation), do: "scale(-1,-1)"}"
             >
-              #{Float.round(value, 2)}%
+              #{displayed_percentage_value}%
             </text>
           """
         else
