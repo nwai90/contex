@@ -239,10 +239,22 @@ defmodule Contex.Plot do
         _ -> width * 0.3
       end
 
+    viewbox_offset = trunc(width * 0.2)
+    viewbox_min_x = if legend_setting == :legend_none, do: viewbox_offset, else: 0
+    viewbox_min_y = 0
+    viewbox_width = if legend_setting == :legend_none, do: width - viewbox_offset, else: width
+
+    viewbox_height =
+      if legend_setting == :legend_none do
+        height - trunc(viewbox_offset * 0.75)
+      else
+        height
+      end
+
     output = [
       ~s|<svg version="1.1" xmlns="http://www.w3.org/2000/svg\" |,
       ~s|xmlns:xlink="http://www.w3.org/1999/xlink" class="chart" |,
-      ~s|viewBox="0 0 #{width} #{height}" role="img">|,
+      ~s|viewBox="#{viewbox_min_x} #{viewbox_min_y} #{viewbox_width} #{viewbox_height}" role="img">|,
       get_default_style(plot),
       get_titles_svg(plot, content_width, legend_setting),
       get_axis_labels_svg(plot, content_width, content_height),
